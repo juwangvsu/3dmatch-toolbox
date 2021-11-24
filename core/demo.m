@@ -14,7 +14,9 @@ fragment2DescriptorsFile = 'fragment-2.desc.3dmatch.bin';
 
 % Load fragment point clouds
 fragment1PointCloud = pcread(fragment1PointCloudFile);
+fragm1size = fragment1PointCloud.Count
 fragment2PointCloud = pcread(fragment2PointCloudFile);
+fragm2size = fragment2PointCloud.Count
 
 % Load keypoints of fragment 1
 fid = fopen(fragment1KeypointsFile,'rb');
@@ -47,7 +49,10 @@ fragment2Descriptors = reshape(fragment2DescriptorData(3:end),fragment2Descripto
 fclose(fid);
 
 % Find mutually closest keypoints in 3DMatch descriptor space
-fprintf('Finding mutually closest points in 3DMatch descriptor space...\n');
+fprintf('Finding mutually closest points in 3DMatch descriptor space...\n point cloud #1: vertex # %d, keypoints # %d, descriptor # %d, descriptor dimension %d \n; point cloud #2: vertex # %d, keypoints # %d, descriptor # %d, descriptor dimension %d \n', ...
+    fragm1size, numFragment1Keypoints,numFragment1Keypoints, fragment1DescriptorSize, ...
+    fragm2size, numFragment2Keypoints, numFragment1Keypoints, fragment1DescriptorSize);
+
 fragment2KDT = KDTreeSearcher(fragment2Descriptors);
 fragment1KDT = KDTreeSearcher(fragment1Descriptors);
 fragment1NNIdx = knnsearch(fragment2KDT,fragment1Descriptors);
